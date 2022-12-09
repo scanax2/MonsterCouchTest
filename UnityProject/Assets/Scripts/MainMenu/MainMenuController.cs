@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 public class MainMenuController : MonoBehaviour
 {
@@ -16,6 +17,9 @@ public class MainMenuController : MonoBehaviour
     [SerializeField]
     private GameObject firstSelectableOnSettings;
 
+    [SerializeField]
+    private HandleInput handleInput;
+
 
     public void Start()
     {
@@ -24,11 +28,13 @@ public class MainMenuController : MonoBehaviour
 
     public void StartGame()
     {
-        
+        SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
     }
 
     public void SwitchToMainPage()
     {
+        handleInput.OnBackKeyDown -= SwitchToMainPage;
+
         mainPage.SetActive(true);
         settingsPage.SetActive(false);
         EventSystem.current.SetSelectedGameObject(firstSelectableOnMainPage);
@@ -36,6 +42,8 @@ public class MainMenuController : MonoBehaviour
 
     public void SwitchToSettings()
     {
+        handleInput.OnBackKeyDown += SwitchToMainPage;
+
         mainPage.SetActive(false);
         settingsPage.SetActive(true);
         EventSystem.current.SetSelectedGameObject(firstSelectableOnSettings);

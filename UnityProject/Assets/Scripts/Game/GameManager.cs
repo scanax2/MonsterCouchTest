@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -8,6 +9,9 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     private PlayerController player;
+
+    [SerializeField]
+    private HandleInput handleInput;
 
     [SerializeField]
     private int enemiesNumber;
@@ -23,6 +27,8 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        handleInput.OnBackKeyDown += GoToMainMenu;
+
         levelBounds = CalculateLevelBounds(mainCamera, Vector2.one / 4f);
         InitializeLevel(levelBounds);
     }
@@ -60,5 +66,10 @@ public class GameManager : MonoBehaviour
             camera.transform.position,
             new Vector3(cameraHeight * screenAspect - padding.x, cameraHeight - padding.y, 0));
         return bounds;
+    }
+
+    private void GoToMainMenu()
+    {
+        SceneManager.LoadScene("MainMenuScene", LoadSceneMode.Single);
     }
 }
